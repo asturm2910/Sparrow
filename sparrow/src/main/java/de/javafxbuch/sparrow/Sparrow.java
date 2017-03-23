@@ -21,6 +21,10 @@ public class Sparrow extends Application {
     public static void main(String[] args) throws Exception {
         launch(args);
     }
+    
+    public void init() {
+    	log.debug("init");
+    }
 
     public void start(Stage stage) throws Exception {
 
@@ -31,20 +35,28 @@ public class Sparrow extends Application {
         rootNode.getChildren().add(text);
         
         try {
+        	log.info("Connection to Twitter...");
         	Twitter twitter = TwitterFactory.getSingleton();
+        	log.info("done!");
+        	log.info("Requesting Timeline for registered account...");
         	ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
         	text.setText(homeTimeline.get(0).getText());
+        	log.info("done!");
         }
         catch (TwitterException ex) {
         	log.error("Twitter Exception", ex);
         }
         
         log.debug("Showing JFX scene");
-        Scene scene = new Scene(rootNode, 400, 200);
+        Scene scene = new Scene(rootNode, 1200, 200);
 //        scene.getStylesheets().add("/styles/styles.css");
 
         stage.setTitle("SparrowFX Application");
         stage.setScene(scene);
         stage.show();
+    }
+    
+    public void stop() {
+    	log.debug("Stopping Application");
     }
 }
